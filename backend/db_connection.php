@@ -12,6 +12,4 @@
         die("Connessione fallita" . $conn -> connect_error);
     }
 
-    echo "Connessione al db effettuata correttamente ";
-
 ?>
