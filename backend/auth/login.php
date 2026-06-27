@@ -21,7 +21,8 @@
         $_SESSION["user_id"] = $user["id"];
         $_SESSION["username"] = $user["username"];
 
-        echo "Login effettuato con successo";
+        header("Location: ../../frontend/dashboard.php");
+
 
     }else{
         echo "Credenziali non valide!!";
