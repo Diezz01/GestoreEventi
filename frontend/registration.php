@@ -1,3 +1,22 @@
+<?php
+    $error = "";
+
+    if (isset($_GET["error"])) {
+
+        switch ($_GET["error"]) {
+
+            case "username_exists":
+                $error = "Username già utilizzato";
+                break;
+
+            case "email_exists":
+                $error = "Email già utilizzata";
+                break;
+        }
+
+    }
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,6 +39,12 @@
     <label>Password</label><br>
     <input id="password" type="password" name="password" required><br><br>
     <small id="pwdError"></small>
+
+    <?php if ($error != ""): ?>
+        <p class="error">
+            <?= $error ?>
+        </p>
+    <?php endif; ?>
 
     <button id="submit_button" type="submit" disabled>
         Registrati
