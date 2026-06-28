@@ -5,28 +5,36 @@
         exit;
     }
 ?>
-<h1>Benvenuto <?= $_SESSION["username"] ?></h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <script src="asset/dashboard.js"></script>
+    <h1>Benvenuto <?= $_SESSION["username"] ?></h1>
 
-<a href="../backend/auth/logout.php">Logout</a>
+    <a href="../backend/auth/logout.php">Logout</a>
 
-<hr>
+    <hr>
 
-<h2>Crea evento</h2>
+    <h2>Crea evento</h2>
+    <div id="Esito"></div>
+    <form id="eventForm">
+        <input type="text" name="titolo" placeholder="Titolo">
+        <input type="date" name="data">
 
-<form id="eventForm">
-    <input type="text" name="titolo" placeholder="Titolo">
-    <input type="date" name="data">
+        <select name="stato">
+            <option value="1">In programma</option>
+            <option value="2">Concluso</option>
+        </select>
 
-    <select name="stato">
-        <option value="1">In programma</option>
-        <option value="2">Concluso</option>
-    </select>
+        <button type="submit">Crea</button>
+    </form>
 
-    <button type="submit">Crea</button>
-</form>
+    <hr>
 
-<hr>
+    <h2>I tuoi eventi</h2>
 
-<h2>I tuoi eventi</h2>
-
-<div id="eventsContainer"></div>
+    <div id="boxEvento"></div>
+</body>
