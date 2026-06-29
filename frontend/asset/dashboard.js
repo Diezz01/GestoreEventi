@@ -66,10 +66,41 @@ function mostraEventi(){
                         <h3>${evento.titolo}</h3>
                         <p>${evento.data}</p>
                         <p>${evento.stato}</p>
+
+                        <button onclick="eliminaEvento(${evento.id})">
+                            Elimina Evento
+                        </button>
                     </div>
                 `;
             });
         });
+}
+
+function eliminaEvento(id_evento){
+    if(!confirm("Sei sicuro di voler eliminare questo evento?")){
+        return;
+    }
+    fetch("../backend/functions/delete_event.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "id=" + id_evento
+    })
+    .then(res => res.json())
+    .then(response => {
+
+        if(response.success){
+
+            showMessage(response.message);
+            mostraEventi();
+
+        } else {
+
+            showError(response.message);
+        }
+
+    });
 }
 
 function showMessage(text) {
