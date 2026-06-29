@@ -3,6 +3,10 @@ document.addEventListener("DOMContentLoaded", function(){
 
     const eventForm = document.getElementById("eventForm");
 
+    document.getElementById("applyFilters").addEventListener("click", function(){
+        mostraEventi();
+    });
+
     const data = document.querySelector("[name='data']");
     const stato = document.querySelector("[name='stato']");
         
@@ -44,18 +48,48 @@ document.addEventListener("DOMContentLoaded", function(){
 // controllo dai input del form prima di registrae un evento
 function checkEvento(data, stato){
 
-    const oggi = new Date().toISOString().split("T")[0];
+    const oggi = new Date();
+    oggi.setHours(0,0,0,0);
 
-    if(stato.value == 2 && data.value > oggi){
+    const dataEvento = new Date(data.value);
+
+    console.log("controllo");
+    console.log(stato.value);
+
+    //un evento futuro non puo esere concluso
+    if (parseInt(stato.value) === 2 && dataEvento > oggi) {
+
+        console.log("non va bene");
 
         showError("Un evento futuro non può essere concluso");
 
+        return false;
     }
+
+    //un evento passato non puo essere in programma
+    if (parseInt(stato.value) === 1 && dataEvento < oggi) {
+        showError("Un evento passato non può essere messo in programma");
+        return false;
+    }
+
+    return true;
 }
 
 function mostraEventi(){
+    const sort = document.getElementById("sort")?.value;
+    const filter = document.getElementById("filter")?.value;
+    const from = document.getElementById("from")?.value;
+    const to = document.getElementById("to")?.value;
+    
+    let url_backend = "../backend/functions/fetch_list_event.php?";
+
+    if(sort) url_backend += `sort=${sort}&`;
+    if(filter) url_backend += `filter=${filter}&`;
+    if(from) url_backend += `from=${from}&`;
+    if(to) url_backend += `to=${to}&`;
+
     // chiamata http al backend per estarrre i dati degli eventi dal db
-    fetch("../backend/functions/fetch_list_event.php")
+    fetch(url_backend)
         .then(res => res.json())
         .then(data =>{
             const boxEvento = document.getElementById("boxEvento");

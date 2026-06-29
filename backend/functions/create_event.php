@@ -26,6 +26,16 @@
         exit;
     }
 
+    if ($stato == 1 && $data < $oggi) {
+
+        echo json_encode([
+            "success" => false,
+            "message" => "Un evento passato non può essere messo in programma"
+        ]);
+
+        exit;
+    }
+
     $query = $conn -> prepare("INSERT INTO eventi (titolo, data, stato, creato_da) VALUES (?, ?, ?, ?)");
     
     $query -> bind_param("ssii",$titolo, $data, $stato, $creato_da);

@@ -35,6 +35,22 @@
     <hr>
 
     <h2>I tuoi eventi</h2>
+    <select id="sort">
+        <option value="">Ordina</option>
+        <option value="data">Data</option>
+        <option value="nome">Nome</option>
+    </select>
+
+    <select id="filter">
+        <option value="">Tutti</option>
+        <option value="programmati">In programma</option>
+        <option value="conclusi">Conclusi</option>
+    </select>
+
+    <input type="date" id="from">
+    <input type="date" id="to">
+
+    <button id="applyFilters">Filtra</button>
 
     <div id="boxEvento"></div>
 </body>
