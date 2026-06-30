@@ -96,14 +96,21 @@ function mostraEventi(){
             boxEvento.innerHTML = "";
             data.forEach(evento => {
                 boxEvento.innerHTML += `
-                    <div style="border:1px solid #ccc; padding:10px; margin:5px;">
-                        <h3>${evento.titolo}</h3>
-                        <p>${evento.data}</p>
-                        <p>${evento.stato}</p>
+                    <div class="evento">
 
-                        <button onclick="eliminaEvento(${evento.id})">
-                            Elimina Evento
-                        </button>
+                        <h3>${evento.titolo}</h3>
+
+                        <div class="evento-body">
+                            <p><strong>Stato:</strong> ${evento.stato.charAt(0).toUpperCase() + evento.stato.slice(1)}</p>
+                            <p><strong>Data:</strong> ${evento.data}</p>
+                        </div>
+
+                        <div class="evento-actions">
+                            <button onclick="eliminaEvento(${evento.id})">
+                                Elimina
+                            </button>
+                        </div>
+
                     </div>
                 `;
             });

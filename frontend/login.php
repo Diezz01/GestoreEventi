@@ -25,7 +25,7 @@
     <input id="password" type="password" name="password" required><br><br>
     <small id="pwdError"></small>
 
-    <button id="submit_button" type="submit" disabled>Accedi</button>
+    <button id="submit_button" type="submit" disabled>Accedi</button><br><br>
     <?php
         if(isset($_SESSION["login_error"])){
 
