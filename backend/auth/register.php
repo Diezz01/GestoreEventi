@@ -1,4 +1,5 @@
 <?php
+    session_start();
     require_once "../db_connection.php";
     
     //prendo i dati dal form di registrazione
@@ -38,7 +39,7 @@
     $query -> bind_param("sss", $username, $email, $hashed_pwd);
 
     $query -> execute();
-    
+    $_SESSION["register_success"] = "Registrazione avvenuta con successo!";
     header("Location: ../../frontend/login.php");//redirect al login
     exit;
 

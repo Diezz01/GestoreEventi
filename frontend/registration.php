@@ -23,34 +23,43 @@
     <title>SignUP</title>
 </head>
 <body>
-<script src="asset/singup_validation.js"></script>
-<h1>Registrati Qui per gestire i tuoi eventi</h1>
+    <link rel="stylesheet" href="css/auth.css">
+    <script src="asset/singup_validation.js"></script>
+    <div class="auth-container">
+        <h1>Registrati su <br> Event Manager</h1>
+        
+        <form id="signUp_form" action="../backend/auth/register.php" method="POST">
 
-<form id="signUp_form" action="../backend/auth/register.php" method="POST">
+            <div class="field">
+                <label>Username</label>
+                <small id="usernameError"></small>
+            </div>
+            <input id="username" type="text" name="username" required><br><br>
+            
 
-    <label>Username</label><br>
-    <input id="username" type="text" name="username" required><br><br>
-    <small id="usernameError"></small>
+            <div class="field">
+                <label>Email</label>
+                <small id="emailError"></small>
+            </div>
+            <input id="email" type="email" name="email" required><br><br>
+            <div class="field">
+                <label>Password</label>
+                <small id="pwdError"></small>
+            </div>
+            <input id="password" type="password" name="password" required><br><br>
 
-    <label>Email</label><br>
-    <input id="email" type="email" name="email" required><br><br>
-    <small id="emailError"></small>
 
-    <label>Password</label><br>
-    <input id="password" type="password" name="password" required><br><br>
-    <small id="pwdError"></small>
+            <?php if ($error != ""): ?>
+                <p class="error">
+                    <?= $error ?>
+                </p>
+            <?php endif; ?>
 
-    <?php if ($error != ""): ?>
-        <p class="error">
-            <?= $error ?>
-        </p>
-    <?php endif; ?>
+            <button id="submit_button" type="submit" disabled>
+                Registrati
+            </button>
 
-    <button id="submit_button" type="submit" disabled>
-        Registrati
-    </button>
-
-</form>
-
+        </form>
+    </div>
 </body>
 </html>

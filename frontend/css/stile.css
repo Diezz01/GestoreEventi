@@ -1,17 +1,17 @@
-/* layout base */
+
 body {
     font-family: Arial, sans-serif;
     background: #f4f6f9;
     margin: 0;
 }
 
-/* contenitore centrale */
+
 .container {
     width: 800px;
     margin: 30px auto;
 }
 
-/* card stile moderno */
+
 .card {
     background: white;
     padding: 20px;
@@ -20,13 +20,13 @@ body {
     box-shadow: 0 2px 10px rgba(0,0,0,0.08);
 }
 
-/* titoli */
+
 h1 {
     text-align: center;
     margin-bottom: 20px;
 }
 
-/* input */
+
 .form-row {
     display: flex;
     gap: 10px;
@@ -47,7 +47,7 @@ h1 {
     padding: 10px 15px;
     white-space: nowrap;
 }
-/* bottoni */
+
 button {
     background: #2d6cdf;
     color: white;
@@ -86,7 +86,7 @@ button:hover {
     align-items: center;
 }
 
-/* errori */
+
 .error-message {
     background: #ffdddd;
     color: #a10000;
@@ -94,7 +94,7 @@ button:hover {
     border-radius: 6px;
 }
 
-/* successo */
+
 .success-message {
     background: #ddffdd;
     color: #0a6b0a;

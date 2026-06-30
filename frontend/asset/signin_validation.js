@@ -22,8 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
             usernameError.style.color = "red";
             isUsernameValid = false;
         } else {
-            usernameError.textContent = "OK";
-            usernameError.style.color = "green";
+            usernameError.textContent = "";
             isUsernameValid = true;
         }
 
@@ -37,8 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
             passwordError.style.color = "red";
             isPasswordValid = false;
         } else {
-            passwordError.textContent = "OK";
-            passwordError.style.color = "green";
+            passwordError.textContent = "";
             isPasswordValid = true;
         }
 

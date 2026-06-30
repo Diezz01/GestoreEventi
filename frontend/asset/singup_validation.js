@@ -29,8 +29,7 @@ document.addEventListener("DOMContentLoaded", function(){
             isUsernameValid = false;
         }else{
             isUsernameValid = true;
-            usernameError.textContent = "OK";
-            usernameError.style.color = "green";
+            usernameError.textContent = "";
         }
         checkFormValid();
     });
@@ -43,8 +42,7 @@ document.addEventListener("DOMContentLoaded", function(){
             emailError.style.color = "red";
             isEmailValid = false;
         } else {
-            emailError.textContent = "OK";
-            emailError.style.color = "green";
+            emailError.textContent = "";
             isEmailValid = true;
         }
         checkFormValid();
@@ -56,8 +54,7 @@ document.addEventListener("DOMContentLoaded", function(){
             pwdError.style.color = "red";
             isPwdValid = false;
         } else {
-            pwdError.textContent = "OK";
-            pwdError.style.color = "green";
+            pwdError.textContent = "";
             isPwdValid = true;
         }
         checkFormValid();
