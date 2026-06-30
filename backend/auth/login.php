@@ -1,5 +1,6 @@
 <?php 
     session_start();
+    header("Content-Type: application/json");
 
     require_once "../db_connection.php";
 
@@ -25,7 +26,9 @@
 
 
     }else{
-        echo "Credenziali non valide!!";
+        $_SESSION["login_error"] = "Errore durante l'accesso! Credenziali NON valide!";
+        header("Location: ../../frontend/login.php");
+        exit;
     }
 
 

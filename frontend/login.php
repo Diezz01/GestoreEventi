@@ -1,3 +1,10 @@
+<?php
+
+    session_start();
+
+   
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,7 +14,7 @@
 <script src="asset/signin_validation.js" ></script>
 <h1>Entra Qui per gestire i tuoi eventi</h1>
 
-<form action="../backend/auth/login.php" method="POST">
+<form id="loginForm" action="../backend/auth/login.php" method="POST">
 
     <label>Username</label><br>
     <input id="username" type="text" name="username" required><br><br>
@@ -19,7 +26,18 @@
     <small id="pwdError"></small>
 
     <button id="submit_button" type="submit" disabled>Accedi</button>
+    <?php
+        if(isset($_SESSION["login_error"])){
 
+            echo "
+            <small style='color:red'>
+                {$_SESSION["login_error"]}
+            </small>
+            ";
+
+            unset($_SESSION["login_error"]);
+        }
+    ?>
 </form>
 
 <p> Non sei ancora iscritto? Registrati <a href="registration.php">qui</a></p>
