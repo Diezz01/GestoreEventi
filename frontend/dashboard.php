@@ -58,6 +58,8 @@
         </div>
         <hr>
         <h2>Tutti i tuoi eventi</h2>
-        <div id="boxEvento"></div>
+        
+        <div id="boxEvento">
+        </div>
     </div>
 </body>

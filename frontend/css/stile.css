@@ -67,16 +67,28 @@ button:hover {
     gap: 10px;
 }
 
+
 .evento {
     background: white;
     padding: 15px;
-
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-
     border-left: 5px solid #2d6cdf;
     transition: 0.2s;
 }
+
+.event-error {
+    background: #ffd6d6;
+    color: #a10000;
+
+    padding: 10px;
+    border-radius: 8px;
+
+    margin-bottom: 15px;
+
+    font-weight: bold;
+}
+
 .evento:hover {
     transform: translateY(-2px);
 }
@@ -86,14 +98,12 @@ button:hover {
     align-items: center;
 }
 
-
 .error-message {
     background: #ffdddd;
     color: #a10000;
     padding: 10px;
     border-radius: 6px;
 }
-
 
 .success-message {
     background: #ddffdd;
@@ -118,4 +128,15 @@ button:hover {
     font-weight: bold;
 
     transition: 0.2s;
+}
+.evento-actions button {
+    margin-left: 5px;
+}
+
+.evento-actions button:first-child {
+    background: #2ecc71;
+}
+
+.evento-actions button:first-child:hover {
+    background: #27ae60;
 }

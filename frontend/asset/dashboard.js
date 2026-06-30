@@ -97,7 +97,7 @@ function mostraEventi(){
             data.forEach(evento => {
                 boxEvento.innerHTML += `
                     <div class="evento">
-
+                        <div id="error-${evento.id}" class=""></div>
                         <h3>${evento.titolo}</h3>
 
                         <div class="evento-body">
@@ -107,10 +107,15 @@ function mostraEventi(){
 
                         <div class="evento-actions">
                             <button onclick="eliminaEvento(${evento.id})">
-                                Elimina
+                                    Elimina
                             </button>
+                            ${evento.stato == "in programma" ? `
+                            <button onclick="concludiEvento(${evento.id}, '${evento.data}')">
+                                Concludi
+                            </button>
+                            ` : ""}
+    
                         </div>
-
                     </div>
                 `;
             });
@@ -143,6 +148,53 @@ function eliminaEvento(id_evento){
 
     });
 }
+
+function concludiEvento(id_evento, data_evento) {
+
+    const oggi = new Date();
+    oggi.setHours(0,0,0,0);
+
+    const data = new Date(data_evento);
+    const erroreEevnto = document.getElementById(`error-${id_evento}`);
+
+
+    if (data > oggi) {
+
+        erroreEevnto.classList.add("event-error");
+
+        erroreEevnto.innerHTML = "Evento Futuro! Impossibile da concludere!";
+
+        setTimeout(() => {
+            erroreEevnto.innerHTML = "";
+            erroreEevnto.classList.remove("event-error");
+        }, 3000);
+
+        return;
+    }
+
+    fetch("../backend/functions/close_event.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "id=" + id_evento
+    })
+    .then(res => res.json())
+    .then(response => {
+
+        if (response.success) {
+            showMessage(response.message);
+            mostraEventi();
+        } else {
+            erroreEevnto.innerHTML = response.message;
+            setTimeout(() => {
+                erroreEevnto.innerHTML = "";
+            }, 3000);
+        }
+
+    });
+}
+
 
 function showMessage(text) {
 
