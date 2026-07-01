@@ -77,19 +77,27 @@ button:hover {
     transition: 0.2s;
 }
 
-.event-error {
-    background: #ffd6d6;
-    color: #a10000;
-
+.event-message-error {
     padding: 10px;
     border-radius: 8px;
-
     margin-bottom: 15px;
-
+    font-size: 14px;
+    background: #ffd6d6;
+    color: #a10000;
     font-weight: bold;
 }
 
+.event-message-success {
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    background: #ddffdd;
+    color: #0a6b0a;
+    font-weight: bold;
+}
 .evento:hover {
+    
     transform: translateY(-2px);
 }
 
@@ -103,6 +111,7 @@ button:hover {
     color: #a10000;
     padding: 10px;
     border-radius: 6px;
+    font-weight: bold;
 }
 
 .success-message {
@@ -110,6 +119,7 @@ button:hover {
     color: #0a6b0a;
     padding: 10px;
     border-radius: 6px;
+    font-weight: bold;
 }
 
 
@@ -134,9 +144,88 @@ button:hover {
 }
 
 .evento-actions button:first-child {
+    background: #e74c3c;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+}
+
+.hidden {
+    display: none;
+}
+
+.modal-content input {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.modal-content button {
+    margin-top: 10px;
+    margin-right: 8px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.modal-actions button {
+    flex: 1;
+}
+
+
+.toast {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+
+    padding: 12px 18px;
+    border-radius: 8px;
+
+    color: white;
+    font-weight: bold;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: 0.3s ease;
+    z-index: 9999;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast.success {
     background: #2ecc71;
 }
 
-.evento-actions button:first-child:hover {
-    background: #27ae60;
+
+.toast.error {
+    background: #e74c3c;
 }

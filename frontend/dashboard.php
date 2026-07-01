@@ -13,6 +13,7 @@
 <body>
     <link rel="stylesheet" href="css/stile.css">
     <script src="asset/dashboard.js"></script>
+
     <h1>Benvenuto <?= $_SESSION["username"] ?></h1>
 
     <a href="../backend/auth/logout.php" class="logout-btn">Logout</a>
@@ -57,9 +58,29 @@
             <button id="applyFilters">Filtra</button>
         </div>
         <hr>
+
         <h2>Tutti i tuoi eventi</h2>
-        
-        <div id="boxEvento">
+        <div id="boxEvento"></div>
+
+        <!-- Form nascosto per la modifica di un evento -->
+        <div id="modalEdit" class="modal hidden">
+            <div class="modal-content">
+
+                <h3>Modifica evento</h3>
+
+                <input type="text" id="editTitolo" placeholder="Nuovo Titolo">
+                <input type="date" id="editData" placeholder="Nuova Data">
+
+                <div class="modal-actions">
+                    <button onclick="salvaModifica()">Salva</button>
+                    <button onclick="chiudiModifica()">Chiudi</button>
+                </div>
+                <br>
+                <div id="modalError"></div>
+
+            </div>
         </div>
     </div>
+
+    <div id="toast" class="toast hidden"></div>
 </body>

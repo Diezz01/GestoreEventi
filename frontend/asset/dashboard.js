@@ -34,11 +34,11 @@ document.addEventListener("DOMContentLoaded", function(){
                 this.reset();
                 mostraEventi();
 
-                showMessage(response.message);
+                showMessage(response.message, "success");
 
             } else {
 
-                showError(response.message);
+                showMessage(response.message,"error");
 
             }
         });
@@ -61,14 +61,14 @@ function checkEvento(data, stato){
 
         console.log("non va bene");
 
-        showError("Un evento futuro non può essere concluso");
+        showMessage("Un evento futuro non può essere concluso");
 
         return false;
     }
 
     //un evento passato non puo essere in programma
     if (parseInt(stato.value) === 1 && dataEvento < oggi) {
-        showError("Un evento passato non può essere messo in programma");
+        showMessage("Un evento passato non può essere messo in programma");
         return false;
     }
 
@@ -97,7 +97,7 @@ function mostraEventi(){
             data.forEach(evento => {
                 boxEvento.innerHTML += `
                     <div class="evento">
-                        <div id="error-${evento.id}" class=""></div>
+                        <div id="event-msg-${evento.id}" class=""></div>
                         <h3>${evento.titolo}</h3>
 
                         <div class="evento-body">
@@ -107,13 +107,23 @@ function mostraEventi(){
 
                         <div class="evento-actions">
                             <button onclick="eliminaEvento(${evento.id})">
-                                    Elimina
+                                Elimina
                             </button>
+                            
                             ${evento.stato == "in programma" ? `
-                            <button onclick="concludiEvento(${evento.id}, '${evento.data}')">
-                                Concludi
-                            </button>
+                                <button onclick="apriModifica({
+                                                    id: ${evento.id},
+                                                    titolo: '${evento.titolo}',
+                                                    data: '${evento.data}',
+                                                    stato: '${evento.stato}'
+                                                })">
+                                        Modifica
+                                </button>
+                                <button onclick="concludiEvento(${evento.id}, '${evento.data}')">
+                                    Concludi
+                                </button>
                             ` : ""}
+
     
                         </div>
                     </div>
@@ -138,12 +148,12 @@ function eliminaEvento(id_evento){
 
         if(response.success){
 
-            showMessage(response.message);
+            showToast(response.message, "success");
             mostraEventi();
 
         } else {
 
-            showError(response.message);
+            showMessage(response.message, "error");
         }
 
     });
@@ -155,20 +165,12 @@ function concludiEvento(id_evento, data_evento) {
     oggi.setHours(0,0,0,0);
 
     const data = new Date(data_evento);
-    const erroreEevnto = document.getElementById(`error-${id_evento}`);
+    const erroreEevnto = document.getElementById(`event-msg-${id_evento}`);
 
 
     if (data > oggi) {
-
-        erroreEevnto.classList.add("event-error");
-
-        erroreEevnto.innerHTML = "Evento Futuro! Impossibile da concludere!";
-
-        setTimeout(() => {
-            erroreEevnto.innerHTML = "";
-            erroreEevnto.classList.remove("event-error");
-        }, 3000);
-
+        let messaggio = "Evento Futuro! Impossibile da concludere!";
+        showEventMessage(id_evento,messaggio,"error");
         return;
     }
 
@@ -196,28 +198,133 @@ function concludiEvento(id_evento, data_evento) {
 }
 
 
-function showMessage(text) {
-
+function showMessage(text, tipo) {
+    
     const box = document.getElementById("Esito");
 
-    box.innerHTML = `<div class="success-message">${text}</div>`;
+    if(tipo == "success"){
+        box.innerHTML = `<div class="success-message">${text}</div>`;
+    }else{
+        box.innerHTML = `<div class="error-message">${text}</div>`;
+    }
 
     setTimeout(() => {
         box.innerHTML = "";
     }, 3000);
 }
 
-function showError(text){
 
-    const box = document.getElementById("Esito");
+
+//messaggio che viene visualizzato all'interno della card di un evento
+function showEventMessage(id_evento, messaggio, tipo){
+    const div = document.getElementById(`event-msg-${id_evento}`);
+
+    if(!div) return;
+
+    div.className = `event-message-${tipo}`;
+    div.innerHTML = messaggio;
+
+    setTimeout(() => {
+        div.innerHTML = "";
+        div.className = "";
+    }, 3000);
+}
+
+function showToast(message, type = "success") {
+
+    const toast = document.getElementById("toast");
+
+    if (!toast) return;
+
+    toast.textContent = message;
+    toast.className = `toast ${type} show`;
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 3000);
+}
+
+
+
+function salvaModifica() {
+
+    const id = getEditingEventId();
+
+    const titolo = document.getElementById("editTitolo").value;
+    const data = document.getElementById("editData").value;
+
+
+    fetch("../backend/functions/update_event.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `id=${id}&titolo=${titolo}&data=${data}`
+    })
+    .then(res => res.json())
+    .then(response => {
+
+        if (response.success) {
+            chiudiModifica();
+            mostraEventi();
+            showToast(response.message, "success");
+      
+        } else {
+            showModalError(response.message);
+        }
+
+    });
+}
+
+let editingEventId = null;
+
+function apriModifica(evento) {
+
+    editingEventId = evento.id;
+
+    document.getElementById("editTitolo").value = evento.titolo;
+    document.getElementById("editData").value = evento.data;
+
+    document.getElementById("modalEdit").classList.remove("hidden");
+
+    clearModalError();
+}
+
+
+function chiudiModifica() {
+
+    document.getElementById("modalEdit").classList.add("hidden");
+
+    editingEventId = null;
+
+    clearModalError();
+}
+
+
+function getEditingEventId() {
+    return editingEventId;
+}
+
+
+function showModalError(message) {
+
+    const box = document.getElementById("modalError");
+
+    if (!box) return;
 
     box.innerHTML = `
         <div class="error-message">
-            ${text}
+            ${message}
         </div>
     `;
+}
 
-    setTimeout(() => {
+
+function clearModalError() {
+
+    const box = document.getElementById("modalError");
+
+    if (box) {
         box.innerHTML = "";
-    },3000);
+    }
 }
