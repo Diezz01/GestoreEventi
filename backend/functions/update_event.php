@@ -14,15 +14,25 @@ if (!isset($_SESSION["user_id"])) {
     exit;
 }
 
+
 $user_id = $_SESSION["user_id"];
 
 $id = $_POST["id"];
 $titolo = trim($_POST["titolo"]);
 $data = $_POST["data"];
+$ora = $_POST["ora"];
 
+
+if (empty($id) || empty($titolo) || empty($data) || empty($ora)) {
+    echo json_encode([
+        "success" => false,
+        "message" => "Tutti i campi sono obbligatori"
+    ]);
+    exit;
+}
 
 $query = $conn -> prepare("
-    SELECT stato, data
+    SELECT stato, data, orario
     FROM eventi
     WHERE id = ? AND creato_da = ?
 ");
@@ -51,24 +61,29 @@ if ((int)$evento["stato"] !== 1) {
 }
 
 $oggi = date("Y-m-d");
+$adesso = date("H:i");
 
-if ($data < $oggi) {
+$data_ora_evento = $data . " " . $ora; // es: 2026-01-22 14:30
+$data_ora_oggi = $oggi . " " . $adesso;
+
+if ($data_ora_evento < $data_ora_oggi) {
+
     echo json_encode([
         "success" => false,
-        "message" => "Evento in programma! Inserire una data successiva a quella odierna"
+        "message" => "Non puoi impostare un evento nel passato"
     ]);
+
     exit;
 }
-
 
 // UPDATE SOLO titolo e data
 $query = $conn -> prepare("
     UPDATE eventi
-    SET titolo = ?, data = ?
+    SET titolo = ?, data = ?, orario = ?
     WHERE id = ? AND creato_da = ?
 ");
 
-$query -> bind_param("ssii", $titolo, $data, $id, $user_id);
+$query -> bind_param("sssii", $titolo, $data, $ora, $id, $user_id);
 
 if ($query -> execute()) {
 

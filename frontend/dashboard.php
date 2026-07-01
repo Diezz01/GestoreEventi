@@ -26,6 +26,7 @@
             <form id="eventForm" class=" card form-row">
                 <input type="text" name="titolo" placeholder="Titolo">
                 <input type="date" name="data">
+                <input type="time" name="ora">
 
                 <select name="stato">
                     <option value="1">In programma</option>
@@ -70,6 +71,7 @@
 
                 <input type="text" id="editTitolo" placeholder="Nuovo Titolo">
                 <input type="date" id="editData" placeholder="Nuova Data">
+                <input type="time" id="editOra">
 
                 <div class="modal-actions">
                     <button onclick="salvaModifica()">Salva</button>

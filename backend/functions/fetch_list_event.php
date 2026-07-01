@@ -13,7 +13,7 @@
     $to = $_GET["to"] ?? null;
 
     //query usata per effettuare il fetch degli eventi
-    $query_base = "SELECT e.id, e.titolo, e.data, s.stato FROM eventi e INNER JOIN stati_eventi s ON s.id = e.stato WHERE e.creato_da = ?";
+    $query_base = "SELECT e.id, e.titolo, e.data, e.orario, s.stato FROM eventi e INNER JOIN stati_eventi s ON s.id = e.stato WHERE e.creato_da = ?";
     
     //lista dei possibili parametri da inserire nei placeholder della query
     $params = []; 

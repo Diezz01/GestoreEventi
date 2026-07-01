@@ -9,17 +9,34 @@ document.addEventListener("DOMContentLoaded", function(){
 
     const data = document.querySelector("[name='data']");
     const stato = document.querySelector("[name='stato']");
-        
+    const titolo = document.querySelector("[name='titolo']");
+    const ora = document.querySelector("[name='ora']");
+
     stato.addEventListener("change", function(){
-        checkEvento(data, stato);
+        checkEvento(data, ora, stato);
     });
 
     data.addEventListener("change", function(){
-        checkEvento(data, stato);
+        checkEvento(data, ora, stato);
+    });
+
+    ora.addEventListener("change", function(){
+        checkEvento(data, ora, stato);
     });
 
     eventForm.addEventListener("submit", function(e){
         e.preventDefault();
+
+        const titoloVal = titolo.value.trim();
+        const dataVal = data.value;
+        const statoVal = stato.value;
+        const oraVal = ora.value;
+
+        if (!titoloVal || !dataVal || !statoVal || !oraVal) {
+            showMessage("Tutti i campi devono essere compilati", "error");
+            return;
+        }
+
         const formData = new FormData(this);
 
         fetch("../backend/functions/create_event.php", {
@@ -28,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function(){
         })
         .then(res => res.json())
         .then(response => {
-            //ricevo la risposta dal backend
+
             if(response.success){
 
                 this.reset();
@@ -38,39 +55,40 @@ document.addEventListener("DOMContentLoaded", function(){
 
             } else {
 
-                showMessage(response.message,"error");
-
+                showMessage(response.message, "error");
             }
+
         });
     });
 });
 
 // controllo dai input del form prima di registrae un evento
-function checkEvento(data, stato){
+function checkEvento(data, ora, stato){
 
-    const oggi = new Date();
-    oggi.setHours(0,0,0,0);
+    const adesso = new Date();
 
-    const dataEvento = new Date(data.value);
+    const dataEvento = new Date(
+        `${data.value}T${ora.value}`
+    );
 
-    console.log("controllo");
-    console.log(stato.value);
 
-    //un evento futuro non puo esere concluso
-    if (parseInt(stato.value) === 2 && dataEvento > oggi) {
+    // evento concluso ma ancora nel futuro
+    if (parseInt(stato.value) === 2 && dataEvento > adesso) {
 
-        console.log("non va bene");
-
-        showMessage("Un evento futuro non può essere concluso");
+        showMessage("Un evento futuro non può essere concluso", "error");
 
         return false;
     }
 
-    //un evento passato non puo essere in programma
-    if (parseInt(stato.value) === 1 && dataEvento < oggi) {
-        showMessage("Un evento passato non può essere messo in programma");
+
+    // evento in programma ma già passato
+    if (parseInt(stato.value) === 1 && dataEvento < adesso) {
+
+        showMessage("Un evento passato non può essere messo in programma", "error");
+
         return false;
     }
+
 
     return true;
 }
@@ -103,6 +121,7 @@ function mostraEventi(){
                         <div class="evento-body">
                             <p><strong>Stato:</strong> ${evento.stato.charAt(0).toUpperCase() + evento.stato.slice(1)}</p>
                             <p><strong>Data:</strong> ${evento.data}</p>
+                            <p><strong>Orario:</strong> ${evento.orario}</p>
                         </div>
 
                         <div class="evento-actions">
@@ -115,7 +134,8 @@ function mostraEventi(){
                                                     id: ${evento.id},
                                                     titolo: '${evento.titolo}',
                                                     data: '${evento.data}',
-                                                    stato: '${evento.stato}'
+                                                    stato: '${evento.stato}',
+                                                    orario: '${evento.orario}'
                                                 })">
                                         Modifica
                                 </button>
@@ -250,16 +270,21 @@ function salvaModifica() {
 
     const id = getEditingEventId();
 
-    const titolo = document.getElementById("editTitolo").value;
+    const titolo = document.getElementById("editTitolo").value.trim();
     const data = document.getElementById("editData").value;
+    const orario = document.getElementById("editOra").value;
 
+    if (!titolo || !data|| !orario) {
+        showModalError("Tutti i campi devono essere compilati");
+        return;
+    }
 
     fetch("../backend/functions/update_event.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: `id=${id}&titolo=${titolo}&data=${data}`
+        body: `id=${id}&titolo=${encodeURIComponent(titolo)}&data=${data}&ora=${orario}`
     })
     .then(res => res.json())
     .then(response => {
@@ -268,7 +293,7 @@ function salvaModifica() {
             chiudiModifica();
             mostraEventi();
             showToast(response.message, "success");
-      
+
         } else {
             showModalError(response.message);
         }
@@ -284,6 +309,7 @@ function apriModifica(evento) {
 
     document.getElementById("editTitolo").value = evento.titolo;
     document.getElementById("editData").value = evento.data;
+    document.getElementById("editOra").value = evento.orario;
 
     document.getElementById("modalEdit").classList.remove("hidden");
 
